@@ -18,8 +18,3 @@ List tables
 
 Show table info
 >  \dt+ table_name
-
-https://www.youtube.com/watch?v=cm0jNz-inkA
-
-Parei 6:28
-Instalar PG Admin
