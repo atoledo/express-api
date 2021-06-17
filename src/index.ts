@@ -4,8 +4,10 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { Database } from "./config/Database";
 import { UserController } from "./controller/UserController";
+import { UserLoginRequest } from "./model/contract/request/UserLoginRequest";
 import { UserRegisterRequest } from "./model/contract/request/UserRegisterRequest";
 import { BadRequestException } from "./model/exception/BadRequestException";
+import { CommonHandlerException } from "./model/exception/CommonHandlerException";
 
 const app = express();
 const port = 3000;
@@ -18,21 +20,28 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.post("/register", (req: Request, res: Response) => {
+app.post("/register", async (req: Request, res: Response) => {
   const requestBody: UserRegisterRequest = req.body;
-
+  let response = null;
   try {
-    userController.postUserRegister(requestBody);
+    response = await userController.postUserRegister(requestBody);
   } catch (ex) {
-    if (ex instanceof BadRequestException) {
-      res.status(400).json({
-        response: null,
-        error: ex,
-      });
-    }
+    CommonHandlerException.generateErrorResponse(req, res, ex);
     return;
   }
-  res.json("Still mocked!");
+  res.status(201).json(response);
+});
+
+app.post("/login", async (req: Request, res: Response) => {
+  const requestBody: UserLoginRequest = req.body;
+  let response = null;
+  try {
+    response = await userController.postUserLogin(requestBody);
+  } catch (ex) {
+    CommonHandlerException.generateErrorResponse(req, res, ex);
+    return;
+  }
+  res.status(200).json(response);
 });
 
 app.listen(port, () => console.log(`listening on port: ${port}`));

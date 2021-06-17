@@ -3,4 +3,5 @@ export type UserRegisterRequest = {
   password: string;
   confirmPassword: string;
   email: string;
+  age: number;
 };

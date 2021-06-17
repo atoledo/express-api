@@ -4,4 +4,8 @@ export abstract class HttpErrorException {
     private errorCode: string,
     private message: string
   ) {}
+
+  public getMessage() {
+    return this.message;
+  }
 }
